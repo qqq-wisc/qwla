@@ -23,6 +23,16 @@ To run an example, simply:
 uv run examples/epr.py
 ```
 
+## citation
 
+```
+@misc{cryptoeprint:2025/1091,
+      author = {Aws Albarghouthi},
+      title = {Quantum Computing without the Linear Algebra},
+      howpublished = {Cryptology {ePrint} Archive, Paper 2025/1091},
+      year = {2025},
+      url = {https://eprint.iacr.org/2025/1091}
+}
+```
 
 
