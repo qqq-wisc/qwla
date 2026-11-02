@@ -32,20 +32,33 @@ class State:
     Quantum state using a dictionary-like structure mapping bitstrings to amplitudes.
     """
 
-    def __init__(self, n_qubits: int, n_bits: int = 0):
+    def __init__(
+        self,
+        n_qubits: int,
+        n_bits: Optional[int] = None,
+        *,
+        m_bits: Optional[int] = None,
+    ):
         """
-        Initialize a quantum state with n_qubits qubits and m_bits classical bits.
+        Initialize a quantum state with n_qubits qubits and n_bits classical bits.
 
         Args:
             n_qubits: Number of qubits in the system
-            m_bits: Number of classical bits for measurement results
+            n_bits: Number of classical bits for measurement results (default: 0)
+            m_bits: Keyword-only alias for n_bits; if both are supplied, they must match
 
         The state starts in 0...0 (ground state).
         """
+        if m_bits is not None:
+            if n_bits is not None and n_bits != m_bits:
+                raise ValueError("n_bits and m_bits must match when both are supplied")
+            n_bits = m_bits
+        if n_bits is None:
+            n_bits = 0
         assert n_qubits > 0 and n_bits >= 0
 
         self.n_qubits = n_qubits
-        self.m_bits = n_bits
+        self.n_bits = n_bits
         self.state = seq(
             [
                 (bitarray(format(i, f"0{n_qubits}b")), 1.0 if i == 0 else 0.0)
@@ -159,7 +172,7 @@ class State:
         )
 
         # Add classical register values if they exist
-        if self.m_bits > 0:
+        if self.n_bits > 0:
             result += f"\n\nClassical register: {self.cbits}"
 
         return result
